@@ -38,10 +38,4 @@ php -f ./bin/magento deploy:mode:set production \
 && clear && echo "
 ===================== 🚀 Done 🚀 ===================
 
-      Magento 2 Installed successfully!
-
-      🌎 Admin: http://localhost/admin
-      👤 User: admin
-      🔑 Password: admin123
-
 ===================== 🚀 Done 🚀 ==================="

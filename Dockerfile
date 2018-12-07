@@ -63,10 +63,10 @@ RUN apt-get update \
 
 # Install Node, NVM, NPM and Grunt
 
-RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
-  	&& apt-get install -y nodejs build-essential \
-    && curl https://raw.githubusercontent.com/creationix/nvm/v0.16.1/install.sh | sh \
-    && npm i -g grunt-cli yarn
+#RUN curl -sL https://deb.nodesource.com/setup_6.x | bash - \
+#  	&& apt-get install -y nodejs build-essential \
+#    && curl https://raw.githubusercontent.com/creationix/nvm/v0.16.1/install.sh | sh \
+#    && npm i -g grunt-cli yarn
 
 # Install Composer
 
@@ -98,6 +98,13 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get -y install golang-go \
 RUN wget https://files.magerun.net/n98-magerun2.phar \
 	&& chmod +x ./n98-magerun2.phar \
 	&& mv ./n98-magerun2.phar /usr/local/bin/
+
+ENV ION_CUBE_PHP_VERSION "7.1"
+RUN PHP_EXTENSION_DIR="$(php-config --extension-dir)" bash -c 'curl http://downloads3.ioncube.com/loader_downloads/ioncube_loaders_lin_x86-64.tar.gz -o /ioncube_loaders_lin_x86-64.tar.gz && \
+    tar -xzvf /ioncube_loaders_lin_x86-64.tar.gz -C / && \
+    cp "/ioncube/ioncube_loader_lin_${ION_CUBE_PHP_VERSION}.so" $PHP_EXTENSION_DIR && \
+    echo "zend_extension=${PHP_EXTENSION_DIR}/ioncube_loader_lin_${ION_CUBE_PHP_VERSION}.so" > /usr/local/etc/php/conf.d/00-ioncube.ini && \
+    rm -rf /ioncube /ioncube_loaders_lin_x86-64.tar.gz'
 
 # Configuring system
 

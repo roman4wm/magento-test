@@ -1,8 +1,7 @@
 version: '2'
 services:
-  apache:
-    image: rafaelcgstz/magento2
-    # build: .
+  web:
+    build: .
     ports:
       - "80:80" # web
       - "9001:9000" # xdebug
@@ -10,7 +9,7 @@ services:
     volumes:
       - ./src:/var/www/html
       - ~/.composer:/var/www/.composer
-      - ~/.npm:/var/www/.npm
+#      - ~/.npm:/var/www/.npm
       # - ~/.nvm:/var/www/.nvm
     environment:
       XDEBUG_CONFIG: "remote_host=localhost"
@@ -20,7 +19,7 @@ services:
     links:
       - db
     networks:
-      - <project_name>-network
+      - americanoutlets-network
 
   db:
     image: mariadb
@@ -33,8 +32,9 @@ services:
       - MYSQL_PASSWORD=magento
     volumes:
       - dbdata:/var/lib/mysql
+      - ./dump:/tmp/dump
     networks:
-      - <project_name>-network
+      - americanoutlets-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
@@ -46,32 +46,36 @@ services:
     ports:
      - 8080:80
     networks:
-      - <project_name>-network
+      - americanoutlets-network
 
-  redis:
-    image: redis
+  redis_american:
+    build:
+      context: ./redis
     ports:
      - 6379
+    volumes:
+      - ./redisdata:/data
     networks:
-      - <project_name>-network
+      - americanoutlets-network
 
   redis-session:
-    image: redis
+    build:
+      context: ./redis
     ports:
      - 6379
     networks:
-      - <project_name>-network
+      - americanoutlets-network
 
-  mailhog:
-    image: mailhog/mailhog
-    ports:
-      - 1025:1025
-      - 8025:8025
-    networks:
-      - <project_name>-network
+#  mailhog:
+#    image: mailhog/mailhog
+#    ports:
+#      - 1025:1025
+#      - 8025:8025
+#    networks:
+#      - americanoutlets-network
 
 networks:
-  <project_name>-network:
+  americanoutlets-network:
     driver: bridge
 
 volumes:
