@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
-
-docker-compose -f docker-compose.yml -f docker-compose.elasticsearch.yml up -d
-docker-compose -f docker-compose.yml -f docker-compose.elasticsearch.yml ps
+service apache2 stop
+sleep 1
+docker-compose up
+docker-compose -f docker-compose.yml ps
 
 echo "
 ===================== 🚀 Done 🚀 ===================
@@ -10,7 +11,8 @@ echo "
       v.1
       Access your new links:
 
-      🌎 Web server: http://americanoutlets.local or http://localhost
+      🌎 Web server: http://americanoutlets.local
+      🌎 ADMIN:      http://americanoutlets.local/xmng
       ⚙️ PHPMyAdmin: http://localhost:8080
       ✉️ Local emails: http://localhost:8025
 

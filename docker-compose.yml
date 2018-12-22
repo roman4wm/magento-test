@@ -20,6 +20,7 @@ services:
       - db
     networks:
       - americanoutlets-network
+      - portal-laravel_backend
 
   db:
     image: mariadb
@@ -66,6 +67,25 @@ services:
     networks:
       - americanoutlets-network
 
+
+    ### Mailhog ################################################
+  mailhog:
+    build: ./mailhog
+    ports:
+    - "1025:1025"
+    - "8025:8025"
+    networks:
+      - americanoutlets-network
+
+
+    ### MailDev ##############################################
+  maildev:
+    build: ./maildev
+    ports:
+      - 1080:80
+      - 25:25
+    networks:
+      - americanoutlets-network
 #  mailhog:
 #    image: mailhog/mailhog
 #    ports:
@@ -73,10 +93,30 @@ services:
 #      - 8025:8025
 #    networks:
 #      - americanoutlets-network
+  elasticsearch:
+    #    image: elasticsearch:2.4
+    build:
+      context: ./elasticsearch
+    environment:
+    - cluster.name=elasticsearch
+    - bootstrap.memory_lock=true
+    - "ES_JAVA_OPTS=-Xms1024m -Xmx1024m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+    - ./elasticsearchdata/2:/usr/share/elasticsearch/data
+    ports:
+    - 9200:9200
+    networks:
+    - americanoutlets-network
 
 networks:
   americanoutlets-network:
     driver: bridge
+  portal-laravel_backend:
+    external: true
 
 volumes:
   dbdata:
